@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CityInfo.API.Entities;
+﻿using CityInfo.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CityInfo.API.Services
 {
@@ -42,6 +42,22 @@ namespace CityInfo.API.Services
         public PointOfInterest GetPointOfInterestForCity(int cityId, int pointOfInterestId)
         {
             return _context.PointsOfInterest.FirstOrDefault(p => p.CityId == cityId && p.Id == pointOfInterestId);
+        }
+
+        public void AddPointOfInterestForCity(int cityId, PointOfInterest pointOfInterest)
+        {
+            var city = GetCity(cityId, false);
+            city.PointsOfInterest.Add(pointOfInterest);
+        }
+
+        public bool Save()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
+
+        public void DeletePointOfInterest(PointOfInterest pointOfInterest)
+        {
+            _context.PointsOfInterest.Remove(pointOfInterest);
         }
     }
 }
